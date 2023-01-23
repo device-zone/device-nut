@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set --set name --hostname name --select-base /usr/libexec/device/system/ups/usb/drivers.txt --select driver --select-base /usr/libexec/device/system/ups/usb/subdrivers.txt --select subdriver --select-base /usr/libexec/device/system/ups/usb/protocols.txt --select protocol --symlink-base /dev/bus/usb --symlink bus --hex-width 4 --hex-maximum FFFF --hex vendorid --hex-maximum FFFF --hex productid "$@"
+
+  if [ -f /etc/device/system/ups/enabled ]; then
+    /usr/bin/sudo /usr/bin/systemctl try-reload-or-restart nut-autodiscovery.service
+    /usr/bin/sudo /usr/bin/systemctl restart nut-driver-enumerator.service
+  fi
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set --set name --hostname name --select-base /usr/libexec/device/system/ups/usb/drivers.txt --select driver --select-base /usr/libexec/device/system/ups/usb/subdrivers.txt --select subdriver --select-base /usr/libexec/device/system/ups/usb/protocols.txt --select protocol --symlink-base /dev/bus/usb --symlink bus --hex-width 4 --hex-maximum FFFF --hex vendorid --hex-maximum FFFF --hex productid "$@"
+
+fi
+

@@ -1,0 +1,71 @@
+#!/bin/bash
+
+#
+# Network UPS Tools Autodiscovery - USB
+# =====================================
+#
+# This script autogenerates the USB drivers.
+
+set -e
+umask 0007
+
+
+#
+# ups.conf
+# --------
+
+while IFS= read -r -d '' path; do
+
+  usbname=$(head -n 1 ${path}/name.txt)
+
+  cat >> "ups.conf" <<- EOF
+[${usbname}]
+	port = auto
+EOF
+
+  if [ -f "${path}/driver.txt" ]; then
+    driver=$(head -n 1 ${path}/driver.txt)
+    cat >> "ups.conf" <<- EOF
+        driver = "${driver}"
+EOF
+  fi
+
+  if [ -f "${path}/subdriver.txt" ]; then
+    subdriver=$(head -n 1 ${path}/subdriver.txt)
+    cat >> "ups.conf" <<- EOF
+        subdriver = "${subdriver}"
+EOF
+  fi
+
+  if [ -f "${path}/protocol.txt" ]; then
+    protocol=$(head -n 1 ${path}/protocol.txt)
+    cat >> "ups.conf" <<- EOF
+        protocol = "${protocol}"
+EOF
+  fi
+
+  if [ -L "${path}/bus" ]; then
+    bus=$(basename $(realpath "${path}/bus"))
+    cat >> "ups.conf" <<- EOF
+        bus = "${bus}"
+EOF
+  fi
+
+  if [ -f "${path}/vendorid.txt" ]; then
+    vendorid=$(head -n 1 ${path}/vendorid.txt)
+    cat >> "ups.conf" <<- EOF
+        vendorid = "${vendorid}"
+EOF
+  fi
+
+  if [ -f "${path}/productid.txt" ]; then
+    productid=$(head -n 1 ${path}/productid.txt)
+    cat >> "ups.conf" <<- EOF
+        productid = "${productid}"
+EOF
+  fi
+
+done < <(find /etc/device/system/ups/usb/ -mindepth 1 -maxdepth 1 -type l -print0)
+
+
+

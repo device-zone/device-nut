@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+if [ "$1" == "--" ]; then
+
+  /usr/libexec/device-set --remove name --hostname name "$@"
+
+  if [ -f /etc/device/system/ups/enabled ]; then
+    /usr/bin/sudo /usr/bin/systemctl try-reload-or-restart nut-autodiscovery.service
+    /usr/bin/sudo /usr/bin/systemctl restart nut-driver-enumerator.service
+  fi
+
+elif [ "$1" == "-c" ]; then
+
+  /usr/libexec/device-set --remove name --hostname name "$@"
+
+fi
+

@@ -1,0 +1,16 @@
+# systemd service for managing all nut autoconfiguration.
+
+[Unit]
+Description=Network UPS Tools Configuration Autodiscovery
+Before=nut-driver@.service nut-server.service nut-monitor.service
+BindsTo=nut.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /usr/libexec/device-nut-autodiscovery
+ExecReload=/bin/bash /usr/libexec/device-nut-autodiscovery
+RemainAfterExit=on
+
+[Install]
+WantedBy=multi-user.target
+

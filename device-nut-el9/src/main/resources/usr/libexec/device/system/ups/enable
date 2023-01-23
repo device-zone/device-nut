@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+if [ "$1" == "--" ]; then
+
+  if test -f "enabled"; then
+    echo "ups is already enabled."
+  elif test -f "disabled"; then
+    mv "disabled" "enabled"
+    /usr/bin/sudo /usr/bin/systemctl enable nut-autodiscovery.service
+    /usr/bin/sudo /usr/bin/systemctl enable nut.target
+    /usr/bin/sudo /usr/bin/systemctl restart nut-autodiscovery.service
+    /usr/bin/sudo /usr/bin/systemctl restart nut.target
+  else
+    touch "enabled"
+    echo "ups will be enabled on next reboot."
+  fi
+
+fi
+

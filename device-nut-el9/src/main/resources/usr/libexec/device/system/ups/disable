@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+umask 0002
+
+if [ "$1" == "--" ]; then
+
+  if test -f "disabled"; then
+    echo "ups is already disabled."
+  elif test -f "enabled"; then
+    mv "enabled" "disabled"
+    /usr/bin/sudo /usr/bin/systemctl stop nut-autodiscovery.service
+    /usr/bin/sudo /usr/bin/systemctl stop nut.target
+    /usr/bin/sudo /usr/bin/systemctl disable nut-autodiscovery.service
+    /usr/bin/sudo /usr/bin/systemctl disable nut.target
+  fi
+
+fi
+
