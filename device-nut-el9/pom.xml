@@ -163,6 +163,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/system/ups/disable</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/system/ups/show</location>
+                </source>
               </sources>
             </mapping>
           </mappings>

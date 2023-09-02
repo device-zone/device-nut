@@ -133,6 +133,9 @@
                 <source>
                   <location>target/classes/usr/libexec/device/system/ups/usb/set</location>
                 </source>
+                <source>
+                  <location>target/classes/usr/libexec/device/system/ups/usb/show</location>
+                </source>
               </sources>
             </mapping>
             <mapping>
